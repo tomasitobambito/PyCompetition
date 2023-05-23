@@ -5,4 +5,4 @@ This repo contains the files for the entry "NAME GOES HERE" for the python compe
 # Installation instructions
 1. Clone Repo
 2. Create a virtual environment
-3. Run `pip install pygame`
+3. Run `pip install -r requirements.txt`
