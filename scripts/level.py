@@ -17,3 +17,4 @@ class Level:
         self.displaySurf.fill('black')
         self.allSprites.draw(self.displaySurf)
         self.allSprites.update(dt)
+        
