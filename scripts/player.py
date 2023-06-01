@@ -26,6 +26,8 @@ class Player(Character):
 
         self.speed = 300
 
+        self.hp = 3
+
     def input(self):
         keys = pg.key.get_pressed()
 
