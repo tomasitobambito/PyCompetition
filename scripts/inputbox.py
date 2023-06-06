@@ -12,10 +12,12 @@ class InputBox(Dialog):
 
         self.correctAnswer = False
         self.closed = False
-        self.active = True
 
         self.acceptButtonRect = pg.Rect(self.rect.bottomright[0] - 210, 550, 85, 85)
         self.inputRect = pg.Rect(self.rect.bottomleft[0]+125, 550, 930, 85)
+        self.inputRect = self.inputRect.inflate(-30, -60)
+        self.questionTextRect = pg.Rect(self.rect.topleft[0], self.rect.topleft[1], self.rect.width, self.rect.height-110)
+        self.questionTextRect = self.questionTextRect.inflate(-180, -180)
 
     def close(self):
         if pg.mouse.get_pressed()[0]: 
@@ -36,19 +38,19 @@ class InputBox(Dialog):
             self.checkAnswer()
 
     def checkAnswer(self):
-        if self.enteredAnswer.lower() == self.answer:
+        if self.enteredAnswer.lower() == self.answer.lower():
             self.correctAnswer = True
 
-    def updateText(self):
-        if active:
-            keys = pg.key.get_pressed()
-            for key in keys.keys():
-                if keys[key]:
-                    self.userText += key.unicode
+    def updateText(self, inputText, backspace):
+        self.enteredAnswer += inputText
+        
+        if backspace:
+            self.enteredAnswer = self.enteredAnswer[:-1]
 
-    def update(self, dt):
+
+    def update(self, inputText, backspace):
         self.close()
         self.confirm()
-        pg.draw.rect(self.image, 'green', self.inputRect)
-
-        print(self.enteredAnswer)
+        self.updateText(inputText, backspace)
+        draw_text(pg.display.get_surface(), self.question, self.textColor, self.questionTextRect, self.font)
+        draw_text(pg.display.get_surface(), self.enteredAnswer, self.textColor, self.inputRect, self.font)

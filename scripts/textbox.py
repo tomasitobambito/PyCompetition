@@ -24,4 +24,4 @@ class TextBox(Dialog):
         self.close()
 
     def display_text(self):
-        draw_text(self.image, self.text, self.textColor, textRect, self.font)
+        draw_text(self.image, self.text, self.textColor, self.textRect, self.font)
