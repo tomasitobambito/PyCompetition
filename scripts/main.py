@@ -37,6 +37,9 @@ class Game:
 
             pg.display.update()
 
+            self.clock.tick()
+            print(self.clock.get_fps())
+
 if __name__ == '__main__':
     game = Game()
     game.run()

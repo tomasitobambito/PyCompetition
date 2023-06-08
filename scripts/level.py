@@ -5,6 +5,7 @@ from textbox import TextBox
 from inputbox import InputBox
 from cameragroup import CameraGroup
 from sprites import Generic
+from support import create_map
 from settings import *
 
 class Level:
@@ -28,6 +29,11 @@ class Level:
             z = LAYERS['background']
         )
 
+        tileImages = create_map(TILESET)
+        self.create_tiles(tileImages)
+
+        print(COLLISION)
+
     def run(self, dt, inputText, backspace):
         self.displaySurf.fill('black')
 
@@ -49,3 +55,11 @@ class Level:
         # else:
         #     self.allSprites.update(dt)
         
+    def create_tiles(self, images):
+        currentPos = Vector2(FIRSTTILEX, FIRSTTILEY)
+        for i in range(len(TILESET)):
+            for j in range(len(TILESET[i])):
+                Generic(currentPos, images[i][j], self.allSprites)
+                currentPos.x += TILESIZE
+            currentPos.y += TILESIZE
+            currentPos.x = FIRSTTILEX

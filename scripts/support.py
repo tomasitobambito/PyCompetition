@@ -67,3 +67,24 @@ def draw_text(surf, text, color, rect, font):
             lineLeft += image.get_width()
         
         lineBottom += textHeight + lineSpacing
+
+def create_map(tileSet):
+    images = []
+    currentRow = []
+    for i in range(len(tileSet)):
+        for j in range(len(tileSet[i])):
+            currentImage = pg.image.load(f"../graphics/map/{tileSet[i][j]}.png").convert_alpha()
+
+            if i == 0 and j != 0:
+                currentImage = pg.transform.rotate(currentImage, -90)
+            elif j == len(tileSet[i]) - 1:
+                currentImage = pg.transform.rotate(currentImage, 180)
+            elif i == len(tileSet) - 1:
+                currentImage = pg.transform.rotate(currentImage, 90)
+          
+
+            currentRow.append(currentImage)
+        images.append(currentRow)
+        currentRow = []
+    
+    return images
