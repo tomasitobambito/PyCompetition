@@ -28,6 +28,8 @@ class Player(Character):
 
         self.hp = 3
 
+        self.z = LAYERS['player']
+
     def input(self):
         keys = pg.key.get_pressed()
 

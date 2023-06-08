@@ -54,6 +54,8 @@ class Enemy(Character):
             'change mistakes': Timer(200)
         }
 
+        self.z = LAYERS['enemy']
+
     def generate_directions(self):
         vect = Vector2((1, 0))
         self.directions = [vect]
