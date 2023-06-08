@@ -6,12 +6,13 @@ from timer import Timer
 from character import Character
 
 class Enemy(Character):
-    def __init__(self, pos, group):
+    def __init__(self, pos, group, collisionGroup):
         self.generate_directions()
 
         super().__init__(
             pos, 
             group, 
+            collisionGroup,
             {
                 'up': [],
                 'down': [],
@@ -121,6 +122,5 @@ class Enemy(Character):
         self.update_hitbox()
         self.handle_idle()
 
-        print(self.rect.x)
         if not self.idle:
             self.animate(dt)

@@ -5,10 +5,11 @@ from support import *
 from character import Character
 
 class Player(Character):
-    def __init__(self, pos, group):
+    def __init__(self, pos, group, collisionGroup):
         super().__init__(
             pos, 
-            group, 
+            group,
+            collisionGroup, 
             {
                 'up': [],
                 'down': [],
@@ -55,6 +56,5 @@ class Player(Character):
         self.input()
         self.move(dt)
         self.handle_idle()
-        print(self.hitbox.x)
         if not self.idle:
             self.animate(dt)

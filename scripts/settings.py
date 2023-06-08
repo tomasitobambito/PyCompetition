@@ -33,3 +33,7 @@ TILESET = [
 ]
 
 COLLISION = [[tile != 'f' for tile in row] for row in TILESET]
+
+# Player
+SPAWNPOINTX = TILESIZE * 8.5
+SPAWNPOINTY = TILESIZE * 7.5

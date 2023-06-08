@@ -7,3 +7,4 @@ class Generic(pg.sprite.Sprite):
         self.image = surf
         self.rect = self.image.get_rect(topleft = pos)
         self.z = z
+        self.hitbox = self.rect.copy().inflate(-15, -5)
