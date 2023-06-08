@@ -108,6 +108,9 @@ class Enemy(Character):
         for timer in self.timers.values():
             timer.update()
 
+    def update_hitbox(self):
+        self.hitbox.bottomleft = self.rect.bottomleft
+
     def update(self, dt):
         self.get_mistakes()
         self.update_timers()
@@ -115,7 +118,9 @@ class Enemy(Character):
         self.add_blood()
         self.calc_direction()
         self.move(dt)
-
+        self.update_hitbox()
         self.handle_idle()
+
+        print(self.rect.x)
         if not self.idle:
             self.animate(dt)

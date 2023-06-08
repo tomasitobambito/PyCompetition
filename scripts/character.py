@@ -28,7 +28,10 @@ class Character(pg.sprite.Sprite):
         self.image = self.animations[self.status][self.frameIndex]
         self.rect = self.image.get_rect(center = pos)
 
-        self.z = LAYERS['main']
+        # collision setup
+        self.hitbox = pg.rect.Rect(self.rect.bottomleft[0], self.rect.bottomleft[1] - 25, self.rect.width, 25)
+        
+        self.z = LAYERS['main'] # failsafe
 
         # movement
         self.direction = Vector2()

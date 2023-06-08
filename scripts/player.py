@@ -55,5 +55,6 @@ class Player(Character):
         self.input()
         self.move(dt)
         self.handle_idle()
+        print(self.hitbox.x)
         if not self.idle:
             self.animate(dt)

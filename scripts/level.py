@@ -13,6 +13,7 @@ class Level:
         self.displaySurf = pg.display.get_surface()
 
         self.allSprites = CameraGroup()
+        self.collisionSprites = pg.sprite.Group()
         self.dialogs = pg.sprite.Group()
 
         self.setup()
@@ -31,9 +32,7 @@ class Level:
 
         tileImages = create_map(TILESET)
         self.create_tiles(tileImages)
-
-        print(COLLISION)
-
+        
     def run(self, dt, inputText, backspace):
         self.displaySurf.fill('black')
 

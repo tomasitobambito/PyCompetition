@@ -32,4 +32,4 @@ TILESET = [
 	["c", "w", "w", "w", "w", "w", "w", "w", "w", "c"]
 ]
 
-COLLISION = [[False if tile == "f" else True for tile in row] for row in TILESET]
+COLLISION = [[tile != 'f' for tile in row] for row in TILESET]
