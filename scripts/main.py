@@ -19,12 +19,21 @@ class Game:
             dt = time.time() - prevTime
             prevTime = time.time()
 
-            # even loop
+            currentInput = ""
+            backspace = False
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     running = False
 
-            self.level.run(dt)
+                if event.type == pg.KEYDOWN:
+                    if event.key == pg.K_BACKSPACE:
+                        backspace = True
+                    else:
+                        currentInput += event.unicode
+
+
+            self.level.run(dt, currentInput, backspace)
 
             pg.display.update()
 
