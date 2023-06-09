@@ -6,12 +6,13 @@ from timer import Timer
 from character import Character
 
 class Enemy(Character):
-    def __init__(self, pos, group):
+    def __init__(self, pos, group, collisionGroup):
         self.generate_directions()
 
         super().__init__(
             pos, 
             group, 
+            collisionGroup,
             {
                 'up': [],
                 'down': [],
@@ -53,6 +54,8 @@ class Enemy(Character):
         self.timers = {
             'change mistakes': Timer(200)
         }
+
+        self.z = LAYERS['enemy']
 
     def generate_directions(self):
         vect = Vector2((1, 0))
@@ -106,6 +109,9 @@ class Enemy(Character):
         for timer in self.timers.values():
             timer.update()
 
+    def update_hitbox(self):
+        self.hitbox.bottomleft = self.rect.bottomleft
+
     def update(self, dt):
         self.get_mistakes()
         self.update_timers()
@@ -113,7 +119,8 @@ class Enemy(Character):
         self.add_blood()
         self.calc_direction()
         self.move(dt)
-
+        self.update_hitbox()
         self.handle_idle()
+
         if not self.idle:
             self.animate(dt)

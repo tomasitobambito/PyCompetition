@@ -35,7 +35,10 @@ class Game:
 
             self.level.run(dt, currentInput, backspace)
 
-            pg.display.update()
+            self.clock.tick()
+            # print(self.clock.get_fps())
+
+            pg.display.update() 
 
 if __name__ == '__main__':
     game = Game()

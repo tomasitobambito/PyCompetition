@@ -5,10 +5,11 @@ from support import *
 from character import Character
 
 class Player(Character):
-    def __init__(self, pos, group):
+    def __init__(self, pos, group, collisionGroup):
         super().__init__(
             pos, 
-            group, 
+            group,
+            collisionGroup, 
             {
                 'up': [],
                 'down': [],
@@ -27,6 +28,8 @@ class Player(Character):
         self.speed = 300
 
         self.hp = 3
+
+        self.z = LAYERS['player']
 
     def input(self):
         keys = pg.key.get_pressed()
