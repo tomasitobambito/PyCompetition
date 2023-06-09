@@ -17,13 +17,15 @@ class Level:
         self.collisionSprites = pg.sprite.Group()
         self.dialogs = pg.sprite.Group()
 
+        self.state = 'game'
+
         self.setup()
 
     def setup(self):
         self.player = Player((SPAWNPOINTX, SPAWNPOINTY), self.allSprites, self.collisionSprites)
         self.enemy = Enemy((SPAWNPOINTX + TILESIZE, SPAWNPOINTY), self.allSprites, self.collisionSprites)
+    
         # self.textbox = TextBox((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), self.allSprites, "I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS I AM IN YOUR WALLS ")
-        # self.inputbox = InputBox((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), self.dialogs, "Question", "Answer")
         Generic(
             pos = (0, 0),
             surf = pg.image.load('../graphics/map/background.png').convert_alpha(),
@@ -42,21 +44,42 @@ class Level:
         self.allSprites.custom_draw(self.player)
         self.dialogs.draw(self.displaySurf)
 
-        self.allSprites.update(dt)
-        
-        # if self.inputbox.closed:
-        #     if self.inputbox.correctAnswer:
-        #         print('answer was right')
-        #     else:
-        #         print('fucking dimwit')
-        #     self.inputbox.kill()
-        #     self.inputbox.closed = False
+        print(self.player.hp)
 
-        # if len(self.inputbox.groups()):
-        #     self.dialogs.update(inputText, backspace)
-        # else:
-        #     self.allSprites.update(dt)
-        
+        # player is running, regular game state
+        if self.state == 'game':
+            self.allSprites.update(dt)
+
+            if self.player.hitbox.colliderect(self.enemy.hitbox):
+                self.inputbox = InputBox((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), self.dialogs, "Question", "Answer")
+                self.state = 'question_time'
+            
+                
+        # question is being asked
+        if self.state == 'question_time':
+            self.dialogs.update(inputText, backspace)
+
+            if self.inputbox.closed:
+                # funy
+                if self.inputbox.answer == "glare":
+                    # play metal pipe falling sound
+                    pass
+
+                if self.inputbox.correctAnswer:
+                    # play sound or something idgaf
+                    pass
+                else:
+                    self.player.hp -= 1
+                self.inputbox.kill()
+
+                # reset to initial state
+                self.player.pos = Vector2(SPAWNPOINTX, SPAWNPOINTY)
+                self.enemy.pos = Vector2(SPAWNPOINTX + 3 * TILESIZE, SPAWNPOINTY)
+
+                self.state = 'game'
+                self.allSprites.update(dt)
+
+
     def create_tiles(self, images):
         currentPos = Vector2(FIRSTTILEX, FIRSTTILEY)
         for i in range(len(TILESET)):
