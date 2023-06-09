@@ -16,16 +16,16 @@ class Enemy(Character):
             {
                 'up': [],
                 'down': [],
-                # 'left': [], 
+                'left': [], 
                 'right': [],
                 'up_bloody': [],
                 'down_bloody': [],
-                # 'left_bloody': [],
+                'left_bloody': [],
                 'right_bloody': [],
                 'up_bloodier': [],
                 'down_bloodier': [],
                 'right_bloodier': [],
-                # 'left_bloodier': []
+                'left_bloodier': []
             },
             {
                 # 'up': [],
@@ -86,7 +86,7 @@ class Enemy(Character):
         elif self.direction.x > 0: 
             self.status = 'right'
         elif self.direction.x < 0:
-            # self.status = 'left'
+            self.status = 'left'
             pass
 
     def add_blood(self):
