@@ -6,6 +6,7 @@ from inputbox import InputBox
 from cameragroup import CameraGroup
 from sprites import Generic
 from support import create_map
+from support import import_questions
 from settings import *
 
 class Level:
@@ -32,6 +33,8 @@ class Level:
 
         tileImages = create_map(TILESET)
         self.create_tiles(tileImages)
+
+        self.questions = import_questions('../data/questions.txt')
         
     def run(self, dt, inputText, backspace):
         self.displaySurf.fill('black')
