@@ -110,8 +110,6 @@ class Enemy(Character):
                 self.direction = direction
                 bestFitAngle = angle
 
-        print(f'forbiddendir: {self.forbiddenDirection} dir: {self.direction}, {obstruction}')
-
         if obstruction and (self.direction == self.forbiddenDirection):
             print('yes')
             self.direction = self.direction.rotate(180)
