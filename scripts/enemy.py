@@ -111,7 +111,6 @@ class Enemy(Character):
                 bestFitAngle = angle
 
         if obstruction and (self.direction == self.forbiddenDirection):
-            print('yes')
             self.direction = self.direction.rotate(180)
         
 
