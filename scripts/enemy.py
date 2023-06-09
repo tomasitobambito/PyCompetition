@@ -49,6 +49,8 @@ class Enemy(Character):
                 self.player = sprite
 
         self.speed = 250
+        self.forbiddenDirection = Vector2(0, 0)
+
         self.mistakes = 0
 
         self.timers = {
@@ -95,16 +97,44 @@ class Enemy(Character):
         elif self.mistakes == 2:
             self.status = self.status.split('_')[0] + '_bloodier'
 
-    def calc_direction(self):
+    def calc_direction(self, dt):
+        obstruction = False
         playerDir = (self.player.pos - self.pos).normalize()
         bestFitAngle = 360
         for direction in self.directions:
+            if self.try_move(direction, dt):
+                obstruction = True
+                continue
             angle = abs(playerDir.angle_to(direction))
             if angle <= bestFitAngle: 
                 self.direction = direction
                 bestFitAngle = angle
 
+        print(f'forbiddendir: {self.forbiddenDirection} dir: {self.direction}, {obstruction}')
 
+        if obstruction and (self.direction == self.forbiddenDirection):
+            print('yes')
+            self.direction = self.direction.rotate(180)
+        
+
+    def try_move(self, moveDir, dt):
+        hitboxCopy = self.hitbox.copy()
+        rectCopy = self.rect.copy()
+        posCopy = Vector2(self.pos.x, self.pos.y)
+
+        # 
+        posCopy.x += moveDir.x * self.speed * dt
+        rectCopy.centerx = round(posCopy.x)
+        hitboxCopy.bottomleft = rectCopy.bottomleft
+        xCollision = self.collision('horizontal', moveDir, hitboxCopy, rectCopy, posCopy)
+
+        posCopy.y += moveDir.y * self.speed * dt
+        rectCopy.centery = round(posCopy.y)
+        hitboxCopy.bottomleft = rectCopy.bottomleft
+        yCollision = self.collision('vertical', moveDir, hitboxCopy, rectCopy, posCopy)
+
+        return xCollision or yCollision
+        
     def update_timers(self):
         for timer in self.timers.values():
             timer.update()
@@ -117,10 +147,16 @@ class Enemy(Character):
         self.update_timers()
         self.get_status()
         self.add_blood()
-        self.calc_direction()
+        self.calc_direction(dt)
         self.move(dt)
         self.update_hitbox()
         self.handle_idle()
 
+        self.forbiddenDirection = Vector2(self.direction.x, self.direction.y).rotate(180)
+        if self.direction.x == 0:
+            self.forbiddenDirection.x = 0
+        elif self.direction.y == 0:
+            self.forbiddenDirection.y = 0
+        
         if not self.idle:
             self.animate(dt)
