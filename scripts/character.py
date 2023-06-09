@@ -56,25 +56,30 @@ class Character(pg.sprite.Sprite):
             self.frameIndex = 0
         self.image = self.animations[self.status][int(self.frameIndex)]
 
-    def collision(self, dir):
+    def collision(self, checkDir, moveDir, hitbox, rect, pos):
+        collision = False
+
         for sprite in self.collisionSprites.sprites():
             if hasattr(sprite, 'hitbox'): # failsafe
-                if sprite.hitbox.colliderect(self.hitbox):
-                    if dir == 'horizontal':
-                        if self.direction.x > 0:
-                            self.hitbox.right = sprite.hitbox.left
-                        elif self.direction.x < 0:
-                            self.hitbox.left = sprite.hitbox.right
-                        self.rect.centerx = self.hitbox.centerx
-                        self.pos.x = self.rect.centerx
+                if sprite.hitbox.colliderect(hitbox):
+                    if checkDir == 'horizontal':
+                        if moveDir.x > 0:
+                            hitbox.right = sprite.hitbox.left
+                        elif moveDir.x < 0:
+                            hitbox.left = sprite.hitbox.right
+                        rect.centerx = hitbox.centerx
+                        pos.x = rect.centerx
 
-                    if dir == 'vertical':
-                        if self.direction.y > 0:
-                            self.hitbox.bottom = sprite.hitbox.top
-                        elif self.direction.y < 0:
-                            self.hitbox.top = sprite.hitbox.bottom
-                        self.rect.bottomleft = self.hitbox.bottomleft
-                        self.pos.y = self.rect.centery
+                    if checkDir == 'vertical':
+                        if moveDir.y > 0:
+                            hitbox.bottom = sprite.hitbox.top
+                        elif moveDir.y < 0:
+                            hitbox.top = sprite.hitbox.bottom
+                        rect.bottomleft = hitbox.bottomleft
+                        pos.y = rect.centery
+                    collision = True
+
+        return collision
     
     def move(self, dt):
         if self.direction.length() == 0:
@@ -85,13 +90,13 @@ class Character(pg.sprite.Sprite):
         self.pos.x += self.direction.x * self.speed * dt
         self.rect.centerx = round(self.pos.x)
         self.hitbox.bottomleft = self.rect.bottomleft
-        self.collision('horizontal')
+        self.collision('horizontal', self.direction, self.hitbox, self.rect, self.pos)
 
         # vertical
         self.pos.y += self.direction.y * self.speed * dt
         self.rect.centery = round(self.pos.y)
         self.hitbox.bottomleft = self.rect.bottomleft
-        self.collision('vertical')
+        self.collision('vertical', self.direction, self.hitbox, self.rect, self.pos)
 
     def handle_idle(self):
         if self.direction.length() == 0:
