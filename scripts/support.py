@@ -88,3 +88,19 @@ def create_map(tileSet):
         currentRow = []
     
     return images
+
+def import_questions(path):
+    questions = []
+    with open(path) as questionFile:        
+        for row in questionFile:
+            if row:
+                currentQuestion = {
+                    'question': '',
+                    'answer': ''
+                }
+
+                currentQuestion['question'], currentQuestion['answer'] = row[:-1].split(';')
+        
+                questions.append(currentQuestion)
+
+    return questions

@@ -82,9 +82,8 @@ class Character(pg.sprite.Sprite):
         return collision
     
     def move(self, dt):
-        if self.direction.length() == 0:
-            return
-        self.direction = self.direction.normalize()
+        if self.direction.length() != 0:
+            self.direction = self.direction.normalize()
 
         # horizontal
         self.pos.x += self.direction.x * self.speed * dt
