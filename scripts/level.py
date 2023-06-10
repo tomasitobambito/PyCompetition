@@ -1,4 +1,5 @@
 import pygame as pg
+import random
 from player import Player
 from enemy import Enemy
 from textbox import TextBox
@@ -49,7 +50,9 @@ class Level:
             self.allSprites.update(dt)
 
             if self.player.hitbox.colliderect(self.enemy.hitbox):
-                self.inputbox = InputBox((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), self.dialogs, "Question", "Answer")
+                question = random.choice(self.questions)
+                self.inputbox = InputBox((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), self.dialogs, question['question'], question['answer'])
+
                 self.state = 'question_time'
             
                 
