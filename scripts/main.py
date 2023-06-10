@@ -7,7 +7,7 @@ class Game:
         pg.init()
 
         self.screen = pg.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-        pg.display.set_caption("Game name (in the future)")
+        pg.display.set_caption(GAME_NAME)
         self.clock = pg.time.Clock()
         self.level = Level()
 
@@ -36,9 +36,6 @@ class Game:
 
 
             self.level.run(dt, currentInput, backspace)
-
-            self.clock.tick()
-            # print(self.clock.get_fps())
 
             pg.display.update() 
 

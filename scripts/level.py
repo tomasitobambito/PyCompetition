@@ -5,6 +5,7 @@ from enemy import Enemy
 from textbox import TextBox
 from inputbox import InputBox
 from cameragroup import CameraGroup
+from soundmixer import SoundMixer
 from sprites import Generic
 from support import create_map
 from support import import_questions
@@ -14,6 +15,7 @@ class Level:
     def __init__(self):
         self.displaySurf = pg.display.get_surface()
 
+        # create groups
         self.allSprites = CameraGroup()
         self.collisionSprites = pg.sprite.Group()
         self.dialogs = pg.sprite.Group()
@@ -21,25 +23,26 @@ class Level:
         self.setup()
 
     def setup(self):
+        # create characters
         self.player = Player(PLAYERSPAWN, self.allSprites, self.collisionSprites)
         self.enemy = Enemy(random.choice(ENEMYSPAWNS), self.allSprites, self.collisionSprites)
     
-        Generic(
-            pos = (0, 0),
-            surf = pg.image.load('../graphics/map/background.png').convert_alpha(),
-            groups = self.allSprites,
-            z = LAYERS['background']
-        )
-
+        # create map
         tileImages = create_map(TILESET)
         self.create_tiles(tileImages)
 
+        # import questions
         self.questions = import_questions('../data/questions.txt')
 
+        # set initial state
         self.state = 'restart'
         self.lastTime = pg.time.get_ticks()
         self.timeAlive = 0
 
+        # import sounds 
+        self.soundMixer = SoundMixer('../sounds')
+        self.soundMixer.sounds['music'].play(loops= -1)
+        
         # reset screen
         self.gameFont = pg.font.Font(FONT, 80)
 
@@ -47,9 +50,20 @@ class Level:
         self.playerStandSurf = pg.transform.scale_by(self.playerStandSurf, 2.5)
         self.playerStandRect = self.playerStandSurf.get_rect(center = (SCREEN_WIDTH / 2, 350))
         
-        self.gameNameSurf = self.gameFont.render('Game Name', False, (0, 0, 0)) # color is subject to change
+        self.gameNameSurf = self.gameFont.render(GAME_NAME, False, (0, 0, 0)) # color is subject to change
         self.gameNameRect = self.gameNameSurf.get_rect(center = (SCREEN_WIDTH / 2, 80))
     
+    def show_score(self):
+        scoreSurf = self.gameFont.render(f'Score: {int(self.timeAlive // 1000)}', False, 'darkred')
+        scoreRect = scoreSurf.get_rect(center = (0, 40))
+        scoreRect.centerx = SCREEN_WIDTH - scoreRect.width / 1.5
+        self.displaySurf.blit(scoreSurf, scoreRect)
+    
+    def show_health(self):
+        healthSurf = self.gameFont.render(f'HP: {self.player.hp}', False, 'darkred')
+        healthRect = healthSurf.get_rect(center = (0, 40))
+        healthRect.centerx = healthRect.width * 0.8
+        self.displaySurf.blit(healthSurf, healthRect)
 
     def run(self, dt, inputText, backspace):
         self.displaySurf.fill('black')
@@ -60,8 +74,12 @@ class Level:
         # player is running, regular game state
         if self.state == 'game':
             self.allSprites.update(dt)
+            self.show_score()
+            self.show_health()
 
             if self.player.hitbox.colliderect(self.enemy.hitbox):
+                self.soundMixer.sounds['caught'].play()
+                
                 question = random.choice(self.questions)
                 self.inputbox = InputBox((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), self.dialogs, question['question'], question['answer'])
 
@@ -75,16 +93,15 @@ class Level:
             self.dialogs.update(inputText, backspace)
 
             if self.inputbox.closed:
-
                 # funy
-                if self.inputbox.answer == "glare":
-                    # play metal pipe falling sound
-                    pass
-
-                if self.inputbox.correctAnswer:
-                    # play sound or something
-                    pass
+                if self.inputbox.enteredAnswer.lower() == "glare":
+                    print('hello')
+                    self.soundMixer.sounds['metal_pipe_falling'].play()
+                    self.player.hp -= 1
+                elif self.inputbox.correctAnswer:
+                    self.soundMixer.sounds['question_correct'].play()
                 else:
+                    self.soundMixer.sounds['question_wrong'].play()
                     self.player.hp -= 1
                 self.inputbox.kill()
 
@@ -95,7 +112,7 @@ class Level:
 
         
         if self.state == 'restart':
-            self.displaySurf.fill('lightgray')
+            self.displaySurf.fill((144, 161, 171))
 
             if self.timeAlive == 0:
                 message = "Press space to play, don't get caught!"

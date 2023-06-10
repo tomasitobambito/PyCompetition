@@ -17,29 +17,10 @@ class Enemy(Character):
                 'up': [],
                 'down': [],
                 'left': [], 
-                'right': [],
-                'up_bloody': [],
-                'down_bloody': [],
-                'left_bloody': [],
-                'right_bloody': [],
-                'up_bloodier': [],
-                'down_bloodier': [],
-                'right_bloodier': [],
-                'left_bloodier': []
+                'right': []
             },
             {
-                # 'up': [],
-                'down': [],
-                # 'left': [], 
-                # 'right': [],
-                # 'up_bloody': [],
-                'down_bloody': [],
-                # 'left_bloody': [],
-                # 'right_bloody': [],
-                # 'up_bloodier': [],
-                'down_bloodier': [],
-                # 'right_bloodier': [],
-                # 'left_bloodier': []
+                'down': []
             }, 
             'enemy'
         )
@@ -52,8 +33,6 @@ class Enemy(Character):
         self.maxSpeed = 330
         self.speedMultiplier = 10
         self.forbiddenDirection = Vector2()
-
-        self.mistakes = 0
 
         self.timers = {
             'grace period': Timer(3000),
@@ -75,17 +54,6 @@ class Enemy(Character):
         if self.speed < self.maxSpeed:
             self.speed += self.speedMultiplier * dt
 
-    def get_mistakes(self):
-        # temporary while question system not in place
-        if not self.timers['change mistakes'].active:
-            keys = pg.key.get_pressed()
-    
-            if keys[pg.K_e]:
-                self.mistakes += 1
-                self.timers['change mistakes'].activate()
-                if self.mistakes >= 3:
-                    self.mistakes = 0
-
     def get_status(self):
         if self.direction.y == -1:
             self.status = 'up'
@@ -96,14 +64,6 @@ class Enemy(Character):
         elif self.direction.x < 0:
             self.status = 'left'
             pass
-
-    def add_blood(self):
-        if self.mistakes == 0:
-            self.status = self.status.split('_')[0]
-        elif self.mistakes == 1:
-            self.status = self.status.split('_')[0] + '_bloody'
-        elif self.mistakes == 2:
-            self.status = self.status.split('_')[0] + '_bloodier'
 
     def calc_direction(self, dt):
         obstruction = False

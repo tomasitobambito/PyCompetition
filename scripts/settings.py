@@ -1,7 +1,7 @@
 import pygame as pg
 from pygame.math import Vector2
 
-GAME_NAME = "Exam Season Nightmares"
+GAME_NAME = "Nightmare on Kluyverweg"
 
 # screen
 SCREEN_WIDTH = 1280
@@ -23,16 +23,16 @@ FIRSTTILEX = TILESIZE * 4
 FIRSTTILEY = TILESIZE * 3
 
 TILESET = [
-	["c", "wt", "wt", "wt", "wt", "wt", "wt", "wt", "wt", "c"],
-	["wl", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
-	["wl", "f", "t", "f", "f", "f", "f", "t", "f", "wr"],
+	["c1", "wt", "wt", "wt", "wt", "wt", "wt", "wt", "wt", "c2"],
 	["wl", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
 	["wl", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
-	["wl", "f", "f", "f", "d", "f", "f", "f", "f", "wr"],
 	["wl", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
-	["wl", "f", "t", "f", "f", "f", "f", "t", "f", "wr"],
 	["wl", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
-	["c", "wb", "wb", "wb", "wb", "wb", "wb", "wb", "wb", "c"]
+	["wl", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
+	["wl", "f", "f", "f", "d", "b", "f", "f", "f", "wr"],
+	["wl", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
+	["wl", "f", "f", "f", "f", "f", "f", "f", "f", "wr"],
+	["c4", "wb", "wb", "wb", "wb", "wb", "wb", "wb", "wb", "c3"]
 ]
 
 COLLISION = [[tile != 'f' for tile in row] for row in TILESET]
