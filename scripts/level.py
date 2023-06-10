@@ -18,11 +18,6 @@ class Level:
         self.collisionSprites = pg.sprite.Group()
         self.dialogs = pg.sprite.Group()
 
-        self.state = 'game'
-
-        self.lastTime = pg.time.get_ticks()
-        self.timeAlive = 0
-
         self.setup()
 
     def setup(self):
@@ -40,11 +35,23 @@ class Level:
         self.create_tiles(tileImages)
 
         self.questions = import_questions('../data/questions.txt')
+
+        self.state = 'restart'
+        self.lastTime = pg.time.get_ticks()
+        self.timeAlive = 0
+
+        # reset screen
+        self.gameFont = pg.font.Font(FONT, 80)
+
+        self.playerStandSurf = pg.image.load('../graphics/player/idle/down.png')
+        self.playerStandSurf = pg.transform.scale_by(self.playerStandSurf, 2.5)
+        self.playerStandRect = self.playerStandSurf.get_rect(center = (SCREEN_WIDTH / 2, 350))
         
+        self.gameNameSurf = self.gameFont.render('Game Name', False, (0, 0, 0)) # color is subject to change
+        self.gameNameRect = self.gameNameSurf.get_rect(center = (SCREEN_WIDTH / 2, 80))
+    
+
     def run(self, dt, inputText, backspace):
-        print(int(self.timeAlive/1000))
-
-
         self.displaySurf.fill('black')
 
         self.allSprites.custom_draw(self.player)
@@ -68,6 +75,7 @@ class Level:
             self.dialogs.update(inputText, backspace)
 
             if self.inputbox.closed:
+
                 # funy
                 if self.inputbox.answer == "glare":
                     # play metal pipe falling sound
@@ -81,19 +89,31 @@ class Level:
                 self.inputbox.kill()
 
                 # reset to initial state
-                self.player.pos = Vector2(PLAYERSPAWN)
-                self.enemy.pos = Vector2(random.choice(ENEMYSPAWNS))
+                self.reset_characters(dt)
 
-                self.state = 'game' if self.player.hp > 0 else 'game over'
-                self.allSprites.update(dt)
+                self.state = 'game' if self.player.hp > 0 else 'restart'
 
-                self.enemy.reset()
-                
-                self.lastTime = pg.time.get_ticks()
         
-        if self.state == 'game over':
-            self.displaySurf.fill('red')
+        if self.state == 'restart':
+            self.displaySurf.fill('lightgray')
 
+            if self.timeAlive == 0:
+                message = "Press space to play, don't get caught!"
+            else:
+                message = f"Your Score: {int(self.timeAlive / 1000)} Press space to retry!"
+            messageSurf = self.gameFont.render(message, False, (0, 0, 0))
+            messageRect = messageSurf.get_rect(center = (SCREEN_WIDTH / 2, 600))
+
+            self.displaySurf.blit(self.playerStandSurf, self.playerStandRect)
+            self.displaySurf.blit(self.gameNameSurf, self.gameNameRect)
+            self.displaySurf.blit(messageSurf, messageRect)
+
+            keys = pg.key.get_pressed()
+
+            if keys[pg.K_SPACE]:
+                self.state = 'game'
+                self.timeAlive = 0
+                self.reset_characters(dt)
 
     def create_tiles(self, images):
         currentPos = Vector2(FIRSTTILEX, FIRSTTILEY)
@@ -105,3 +125,11 @@ class Level:
                 currentPos.x += TILESIZE
             currentPos.y += TILESIZE
             currentPos.x = FIRSTTILEX
+
+    def reset_characters(self, dt):
+        self.player.pos = Vector2(PLAYERSPAWN)
+        self.enemy.pos = Vector2(random.choice(ENEMYSPAWNS))
+        self.allSprites.update(dt)
+        self.enemy.reset()
+        self.player.status = 'down'
+        self.lastTime = pg.time.get_ticks()

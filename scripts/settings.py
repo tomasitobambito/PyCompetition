@@ -1,3 +1,4 @@
+import pygame as pg
 from pygame.math import Vector2
 
 # screen
@@ -44,3 +45,5 @@ ENEMYSPAWNS = [
 	(TILESIZE * 5.5, TILESIZE * 11.5), 
 	(TILESIZE * 12.5, TILESIZE * 11.5)
 ]
+
+FONT = '../data/m5x7.ttf'

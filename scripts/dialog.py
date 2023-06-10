@@ -1,4 +1,5 @@
 import pygame as pg
+from settings import FONT
 
 class Dialog(pg.sprite.Sprite):
     def __init__(self, pos, group, type):
@@ -14,7 +15,7 @@ class Dialog(pg.sprite.Sprite):
         # this position was found using trial and error, do not touch it, it will break
         self.closeButtonRect = pg.Rect(self.rect.topright[0] - 80, 30, 45, 45)
 
-        self.font = pg.font.Font(None, 32)
+        self.font = pg.font.Font(FONT, 48)
 
         self.textColor = (0, 0, 0)
 
