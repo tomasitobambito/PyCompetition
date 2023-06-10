@@ -48,16 +48,21 @@ class Enemy(Character):
             if sprite.charType == 'player':
                 self.player = sprite
 
-        self.speed = 250
-        self.forbiddenDirection = Vector2(0, 0)
+        self.speed = 150
+        self.maxSpeed = 330
+        self.speedMultiplier = 10
+        self.forbiddenDirection = Vector2()
 
         self.mistakes = 0
 
         self.timers = {
+            'grace period': Timer(3000),
             'change mistakes': Timer(200)
         }
 
         self.z = LAYERS['enemy']
+
+        self.timers['grace period'].activate()
 
     def generate_directions(self):
         vect = Vector2((1, 0))
@@ -66,6 +71,9 @@ class Enemy(Character):
             vect = vect.rotate(45)
             self.directions.append(vect)
 
+    def accelerate(self, dt):
+        if self.speed < self.maxSpeed:
+            self.speed += self.speedMultiplier * dt
 
     def get_mistakes(self):
         # temporary while question system not in place
@@ -139,21 +147,28 @@ class Enemy(Character):
     def update_hitbox(self):
         self.hitbox.bottomleft = self.rect.bottomleft
 
+    def reset(self):
+        self.speed = 150
+        self.forbiddenDirection = Vector2()
+        self.timers['grace period'].activate()
+        self.image = self.idleSurfs['down']
+
     def update(self, dt):
-        self.get_mistakes()
         self.update_timers()
         self.get_status()
-        self.add_blood()
-        self.calc_direction(dt)
-        self.move(dt)
-        self.update_hitbox()
-        self.handle_idle()
 
-        self.forbiddenDirection = Vector2(self.direction.x, self.direction.y).rotate(180)
-        if self.direction.x == 0:
-            self.forbiddenDirection.x = 0
-        elif self.direction.y == 0:
-            self.forbiddenDirection.y = 0
-        
-        if not self.idle:
+        if not self.timers['grace period'].active:
+            self.accelerate(dt)
+            self.calc_direction(dt)
+            self.move(dt)
+
+            self.forbiddenDirection = Vector2(self.direction.x, self.direction.y).rotate(180)
+            if self.direction.x == 0:
+                self.forbiddenDirection.x = 0
+            elif self.direction.y == 0:
+                self.forbiddenDirection.y = 0
+
             self.animate(dt)
+        
+        self.update_hitbox()
+    
