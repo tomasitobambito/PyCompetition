@@ -1,0 +1,29 @@
+What year did the first human walk on the moon?;1969
+Statistically how many aircraft are in the air at any given time?;15000
+What's the name of the layer of atmosphere closest to earth's surface?;troposphere
+In which year did the first airplane flight take place?;1903
+What was the name of the brothers who built the first successful airplane?;wright
+In a 4 digit NACA airfoil code which digit determines place of maxium thickness wrt to chord length?;2
+Does Bernoulli's principle hold for high mach numbers?;no
+Which control surface controls pitch of an aircraft?;elevator
+Which control surface controls roll of an aircraft?;aileron
+Which control surface controls yaw of an aircraft?;rudder
+What is the name of the flagship project of DARE?;stratos
+What happens when the angle of attack becomees too high?;stall
+What colour are the black boxes?;orange
+What was the largest jet in history?;An-225 Mriya
+What was the fastest passenger jet?;concorde
+Who flew in the orion module around the moon?;snoopy
+In what year did Tsiolkovsky publish his most famous work?;1903
+What is the last name of the man who launched the first liquid propellent rocket in the USA?;Goddard
+What is the last name of the man who launched the first liquid propellent rocket in the Russia?;Korolev
+What was the last name of the first man in space?;gagarin
+What substance was used as propellant in the V2?;ethanol
+What launcher can carry the highest payload mass?;falcon heavy
+What's the largest rocket?;saturn 5
+What was the name of the first space shuttle?;columbia
+What was the name of the last space shuttle to go up?;atlantis
+What was the name of the first moon mission?;apollo
+What is the name of the current moon mission?;artemis
+What was the first rocket to reach space?;V2
+What year was the VSV Leonardo da Vinci (VO) founded?;1945
