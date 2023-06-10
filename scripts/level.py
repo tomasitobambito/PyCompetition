@@ -113,6 +113,7 @@ class Level:
             if keys[pg.K_SPACE]:
                 self.state = 'game'
                 self.timeAlive = 0
+                self.player.hp = 3
                 self.reset_characters(dt)
 
     def create_tiles(self, images):
@@ -131,5 +132,6 @@ class Level:
         self.enemy.pos = Vector2(random.choice(ENEMYSPAWNS))
         self.allSprites.update(dt)
         self.enemy.reset()
+        self.enemy.move(dt)
         self.player.status = 'down'
         self.lastTime = pg.time.get_ticks()
