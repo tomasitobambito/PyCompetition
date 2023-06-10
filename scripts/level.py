@@ -44,8 +44,6 @@ class Level:
         self.allSprites.custom_draw(self.player)
         self.dialogs.draw(self.displaySurf)
 
-        print(self.player.hp)
-
         # player is running, regular game state
         if self.state == 'game':
             self.allSprites.update(dt)
