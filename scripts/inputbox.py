@@ -1,6 +1,7 @@
 import pygame as pg
 from dialog import Dialog
 from support import draw_text
+from settings import FONT
 
 class InputBox(Dialog):
     def __init__(self, pos, group, question, answer):
@@ -13,9 +14,11 @@ class InputBox(Dialog):
         self.correctAnswer = False
         self.closed = False
 
+        self.questionFont = pg.font.Font(FONT, 80)
+
         self.acceptButtonRect = pg.Rect(self.rect.bottomright[0] - 210, 550, 85, 85)
         self.inputRect = pg.Rect(self.rect.bottomleft[0]+125, 550, 930, 85)
-        self.inputRect = self.inputRect.inflate(-30, -60)
+        self.inputRect = self.inputRect.inflate(-30, -40)
         self.questionTextRect = pg.Rect(self.rect.topleft[0], self.rect.topleft[1], self.rect.width, self.rect.height-110)
         self.questionTextRect = self.questionTextRect.inflate(-180, -180)
 
@@ -52,5 +55,5 @@ class InputBox(Dialog):
         self.close()
         self.confirm()
         self.updateText(inputText, backspace)
-        draw_text(pg.display.get_surface(), self.question, self.textColor, self.questionTextRect, self.font)
+        draw_text(pg.display.get_surface(), self.question, self.textColor, self.questionTextRect, self.questionFont)
         draw_text(pg.display.get_surface(), self.enteredAnswer, self.textColor, self.inputRect, self.font)

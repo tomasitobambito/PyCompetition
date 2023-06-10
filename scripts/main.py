@@ -29,6 +29,8 @@ class Game:
                 if event.type == pg.KEYDOWN:
                     if event.key == pg.K_BACKSPACE:
                         backspace = True
+                    elif event.key == pg.K_RETURN:
+                        pass
                     else:
                         currentInput += event.unicode
 

@@ -27,7 +27,7 @@ class Character(pg.sprite.Sprite):
         self.frameIndex = 0
         self.status = 'down'
         self.idle = True
-        self.image = self.animations[self.status][self.frameIndex]
+        self.image = self.idleSurfs[self.status]
         self.rect = self.image.get_rect(center = pos)
     
 
