@@ -20,6 +20,9 @@ class Level:
 
         self.state = 'game'
 
+        self.lastTime = pg.time.get_ticks()
+        self.timeAlive = 0
+
         self.setup()
 
     def setup(self):
@@ -39,6 +42,9 @@ class Level:
         self.questions = import_questions('../data/questions.txt')
         
     def run(self, dt, inputText, backspace):
+        print(int(self.timeAlive/1000))
+
+
         self.displaySurf.fill('black')
 
         self.allSprites.custom_draw(self.player)
@@ -53,6 +59,9 @@ class Level:
                 self.inputbox = InputBox((SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2), self.dialogs, question['question'], question['answer'])
 
                 self.state = 'question_time'
+        
+            self.timeAlive += pg.time.get_ticks() - self.lastTime
+            self.lastTime = pg.time.get_ticks()
             
         # question is being asked
         if self.state == 'question_time':
@@ -65,7 +74,7 @@ class Level:
                     pass
 
                 if self.inputbox.correctAnswer:
-                    # play sound or something idgaf
+                    # play sound or something
                     pass
                 else:
                     self.player.hp -= 1
@@ -75,10 +84,15 @@ class Level:
                 self.player.pos = Vector2(PLAYERSPAWN)
                 self.enemy.pos = Vector2(random.choice(ENEMYSPAWNS))
 
-                self.state = 'game'
+                self.state = 'game' if self.player.hp > 0 else 'game over'
                 self.allSprites.update(dt)
 
                 self.enemy.reset()
+                
+                self.lastTime = pg.time.get_ticks()
+        
+        if self.state == 'game over':
+            self.displaySurf.fill('red')
 
 
     def create_tiles(self, images):
